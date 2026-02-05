@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  auth_service:
+    build:
+      context: ./Auth_golang
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    environment:
+      CONFIG_PATH: /config/local.yaml
+      SECRET_JWT: "7e593b7a81a1edcd2e1849bb214c835cdb85e843f37d76742c2f07077c4514cd"
+      ALGORITHM_JWT: "HS256" 
+    depends_on:
+      - postgres
+
+  gateway_service:
+    build:
+      context: ./Gateway_golang
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      CONFIG_PATH: /app/config/local.yaml
+      AUTH_GRPC_ADDR: auth_service:50051
+    depends_on:
+      - auth_service
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_service
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -1,0 +1,6 @@
+[submodule "Gateway_golang"]
+	path = Gateway_golang
+	url = https://github.com/Weit145/Gateway_golang
+[submodule "Auth_golang"]
+	path = Auth_golang
+	url = https://github.com/Weit145/Auth_golang
