@@ -12,7 +12,8 @@ services:
       SECRET_JWT: "7e593b7a81a1edcd2e1849bb214c835cdb85e843f37d76742c2f07077c4514cd"
       ALGORITHM_JWT: "HS256" 
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   gateway_service:
     build:
@@ -36,6 +37,11 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
