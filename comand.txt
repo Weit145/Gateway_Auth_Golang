@@ -6,3 +6,18 @@ go mod vendor
 go run cmd/main.go -mod=vendor
 
 go test ./internal/grpc/gateway -v
+
+
+curl -u myuser:mypassword \
+  -X POST http://localhost:8080/registration \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "login": "weit145"}'
+
+curl http://localhost:8080/registration/confirm/sfdsdf
+
+curl --cookie "refresh_token=abc123" http://localhost:8080/refresh
+
+curl -u myuser:mypassword -X POST http://localhost:8080/login 
+
+curl -X GET http://localhost:8080/logout \
+     -H "Authorization: Bearer abc123" 
